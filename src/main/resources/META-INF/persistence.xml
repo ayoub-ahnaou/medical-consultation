@@ -18,6 +18,8 @@
         <class>com.medicale.consultation.consultationmedicale.models.Ticket</class>
         <class>com.medicale.consultation.consultationmedicale.models.MedicaleFile</class>
 
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+
         <properties>
             <!-- JDBC connection -->
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
