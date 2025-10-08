@@ -14,7 +14,7 @@ public class MedicaleFile { // todo: update MedicaleFile typing to MedicalFile
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false, precision = 4, scale = 2)
+    @Column(nullable = false)
     private double temperature;
 
     @Column(nullable = false)
@@ -26,7 +26,7 @@ public class MedicaleFile { // todo: update MedicaleFile typing to MedicalFile
     @Column(nullable = false)
     private int respiratoryRate;
 
-    @Column(nullable = false, name = "oxygen_saturation",  precision = 4, scale = 2)
+    @Column(nullable = false, name = "oxygen_saturation")
     private double oxygenSaturation;
 
     @Column(nullable = false)

@@ -22,7 +22,7 @@ public class Request {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false)
     private double cost;
 
     @Enumerated(EnumType.STRING)

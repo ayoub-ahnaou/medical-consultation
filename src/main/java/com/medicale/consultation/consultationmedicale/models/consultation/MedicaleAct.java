@@ -12,7 +12,7 @@ public class MedicaleAct {
     @Column(nullable = false)
     private String label;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false)
     private double price;
 
     @ManyToOne
