@@ -12,7 +12,7 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
+    @Column(name = "ticket_order", nullable = false)
     private int order;
 
     @Column(nullable = false, name = "created_at")
