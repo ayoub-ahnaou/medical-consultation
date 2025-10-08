@@ -6,6 +6,17 @@
              version="3.0">
 
     <persistence-unit name="MyPU" transaction-type="RESOURCE_LOCAL">
+        <class>com.medicale.consultation.consultationmedicale.models.person.Patient</class>
+        <class>com.medicale.consultation.consultationmedicale.models.person.Specialist</class>
+        <class>com.medicale.consultation.consultationmedicale.models.person.Generalist</class>
+        <class>com.medicale.consultation.consultationmedicale.models.person.Nurse</class>
+
+        <class>com.medicale.consultation.consultationmedicale.models.consultation.Consultation</class>
+        <class>com.medicale.consultation.consultationmedicale.models.consultation.MedicaleAct</class>
+        <class>com.medicale.consultation.consultationmedicale.models.consultation.Request</class>
+
+        <class>com.medicale.consultation.consultationmedicale.models.Ticket</class>
+        <class>com.medicale.consultation.consultationmedicale.models.MedicaleFile</class>
 
         <properties>
             <!-- JDBC connection -->
