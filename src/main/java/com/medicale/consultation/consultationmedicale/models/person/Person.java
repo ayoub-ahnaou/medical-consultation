@@ -2,6 +2,7 @@ package com.medicale.consultation.consultationmedicale.models.person;
 
 import com.google.protobuf.Enum;
 import com.medicale.consultation.consultationmedicale.enums.Gender;
+import com.medicale.consultation.consultationmedicale.enums.Role;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -34,7 +35,10 @@ public abstract class Person {
     @Column(nullable = false, name = "created_at")
     protected LocalDate createdAt;
 
-    public Person(int id, String firstName, String lastName, String username, String password, String phone, Gender gender, LocalDate createdAt) {
+    @Column(name = "role", nullable = false)
+    private Role role;
+
+    public Person(int id, String firstName, String lastName, String username, String password, String phone, Gender gender, LocalDate createdAt, Role role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -43,6 +47,7 @@ public abstract class Person {
         this.phone = phone;
         this.gender = gender;
         this.createdAt = createdAt;
+        this.role = role;
     }
 
     // required by JPA, if another constructor is defined
@@ -110,5 +115,13 @@ public abstract class Person {
 
     public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setCreatedAt(Role role) {
+        this.role = role;
     }
 }

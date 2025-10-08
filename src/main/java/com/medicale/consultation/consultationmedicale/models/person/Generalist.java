@@ -1,6 +1,7 @@
 package com.medicale.consultation.consultationmedicale.models.person;
 
 import com.medicale.consultation.consultationmedicale.enums.Gender;
+import com.medicale.consultation.consultationmedicale.enums.Role;
 import com.medicale.consultation.consultationmedicale.models.consultation.Consultation;
 import jakarta.persistence.*;
 
@@ -20,14 +21,14 @@ public class Generalist extends Person {
     @Column(nullable = false, length = 20)
     private String city;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false)
     private double fee;
 
     @OneToMany(mappedBy = "generalist")
     private List<Consultation> consultations = new ArrayList<>(); // todo: verify this shit, ain't correct by the first time
 
-    public Generalist(int id, String firstName, String lastName, String username, String password, String phone, Gender gender, LocalDate createdAt, String numeroRPPS, String address, String city, double fee) {
-        super(id, firstName, lastName, username, password, phone, gender, createdAt);
+    public Generalist(int id, String firstName, String lastName, String username, String password, String phone, Gender gender, LocalDate createdAt, Role role, String numeroRPPS, String address, String city, double fee) {
+        super(id, firstName, lastName, username, password, phone, gender, createdAt, role);
         this.numeroRPPS = numeroRPPS;
         this.address = address;
         this.city = city;

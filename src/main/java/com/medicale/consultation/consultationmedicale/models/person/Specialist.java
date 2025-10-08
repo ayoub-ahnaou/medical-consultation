@@ -1,6 +1,7 @@
 package com.medicale.consultation.consultationmedicale.models.person;
 
 import com.medicale.consultation.consultationmedicale.enums.Gender;
+import com.medicale.consultation.consultationmedicale.enums.Role;
 import com.medicale.consultation.consultationmedicale.enums.Speciality;
 import com.medicale.consultation.consultationmedicale.models.consultation.Request;
 import jakarta.persistence.*;
@@ -19,14 +20,14 @@ public class Specialist extends Person{
     @Column(nullable = false)
     private Speciality speciality;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false)
     private double fee;
 
     @OneToMany(mappedBy = "specialist", cascade = CascadeType.ALL)
     private List<Request> requests = new ArrayList<>();
 
-    public Specialist(int id, String firstName, String lastName, String username, String password, String phone, Gender gender, LocalDate createdAt, String numeroRPPS, Speciality speciality, double fee) {
-        super(id, firstName, lastName, username, password, phone, gender, createdAt);
+    public Specialist(int id, String firstName, String lastName, String username, String password, String phone, Gender gender, LocalDate createdAt, Role role, String numeroRPPS, Speciality speciality, double fee) {
+        super(id, firstName, lastName, username, password, phone, gender, createdAt, role);
         this.numeroRPPS = numeroRPPS;
         this.speciality = speciality;
         this.fee = fee;

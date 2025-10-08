@@ -1,6 +1,7 @@
 package com.medicale.consultation.consultationmedicale.models.person;
 
 import com.medicale.consultation.consultationmedicale.enums.Gender;
+import com.medicale.consultation.consultationmedicale.enums.Role;
 import com.medicale.consultation.consultationmedicale.models.Ticket;
 import jakarta.persistence.*;
 
@@ -17,17 +18,17 @@ public class Patient extends Person {
     @Column(nullable = false, name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @Column(nullable = false, precision = 5, scale = 2)
+    @Column(nullable = false)
     private double height;
 
-    @Column(nullable = false, precision = 5, scale = 2)
+    @Column(nullable = false)
     private double weight;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Ticket> tickets = new ArrayList<>();
 
-    public Patient(int id, String firstName, String lastName, String username, String password, String phone, Gender gender, LocalDate createdAt, String dossierNumber, LocalDate dateOfBirth, double height, double weight) {
-        super(id, firstName, lastName, username, password, phone, gender, createdAt);
+    public Patient(int id, String firstName, String lastName, String username, String password, String phone, Gender gender, LocalDate createdAt, Role role, String dossierNumber, LocalDate dateOfBirth, double height, double weight) {
+        super(id, firstName, lastName, username, password, phone, gender, createdAt, role);
         this.dossierNumber = dossierNumber;
         this.dateOfBirth = dateOfBirth;
         this.height = height;
