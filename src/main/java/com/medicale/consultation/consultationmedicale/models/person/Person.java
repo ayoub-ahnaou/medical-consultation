@@ -1,6 +1,5 @@
 package com.medicale.consultation.consultationmedicale.models.person;
 
-import com.google.protobuf.Enum;
 import com.medicale.consultation.consultationmedicale.enums.Gender;
 import com.medicale.consultation.consultationmedicale.enums.Role;
 import jakarta.persistence.*;
@@ -35,6 +34,7 @@ public abstract class Person {
     @Column(nullable = false, name = "created_at")
     protected LocalDate createdAt;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
 
@@ -121,7 +121,7 @@ public abstract class Person {
         return role;
     }
 
-    public void setCreatedAt(Role role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }
