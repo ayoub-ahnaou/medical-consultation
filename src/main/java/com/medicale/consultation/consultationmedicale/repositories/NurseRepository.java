@@ -12,14 +12,13 @@ public class NurseRepository {
         this.em = em;
     }
 
-    public Nurse findByUsernameAndPassword(String username, String password) {
+    public Nurse findByUsernameAndPassword(String username) {
         try {
             TypedQuery<Nurse> query = em.createQuery(
-                    "SELECT n FROM Nurse n WHERE n.username = :username AND n.password = :password",
+                    "SELECT n FROM Nurse n WHERE n.username = :username",
                     Nurse.class
             );
             query.setParameter("username", username);
-            query.setParameter("password", password);
 
             return query.getSingleResult();
         } catch (NoResultException e) {

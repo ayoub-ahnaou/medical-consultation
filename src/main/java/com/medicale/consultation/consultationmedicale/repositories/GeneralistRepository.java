@@ -1,6 +1,6 @@
 package com.medicale.consultation.consultationmedicale.repositories;
 
-import com.medicale.consultation.consultationmedicale.models.person.Nurse;
+import com.medicale.consultation.consultationmedicale.models.person.Generalist;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
@@ -12,14 +12,13 @@ public class GeneralistRepository {
         this.em = em;
     }
 
-    public Nurse findByUsernameAndPassword(String username, String password) {
+    public Generalist findByUsernameAndPassword(String username) {
         try {
-            TypedQuery<Nurse> query = em.createQuery(
-                    "SELECT g FROM Generalist g WHERE g.username = :username AND g.password = :password",
-                    Nurse.class
+            TypedQuery<Generalist> query = em.createQuery(
+                    "SELECT g FROM Generalist g WHERE g.username = :username",
+                    Generalist.class
             );
             query.setParameter("username", username);
-            query.setParameter("password", password);
 
             return query.getSingleResult();
         } catch (NoResultException e) {
