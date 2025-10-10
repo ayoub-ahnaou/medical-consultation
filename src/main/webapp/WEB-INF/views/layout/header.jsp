@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tele-Expertise</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 </head>
 <body class="bg-gray-100 font-sans flex flex-col justify-between min-h-screen">
 
@@ -18,28 +20,6 @@
             Tele-Expertise
         </div>
 
-        <!-- Navigation -->
-        <nav>
-            <ul class="flex space-x-6 text-gray-700 font-medium">
-                <li>
-                    <a href="${pageContext.request.contextPath}/dashboard"
-                       class="hover:text-blue-600 transition-colors">Tableau de Bord</a>
-                </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/consultations"
-                       class="hover:text-blue-600 transition-colors">Consultations</a>
-                </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/patients"
-                       class="hover:text-blue-600 transition-colors">Patients</a>
-                </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/experts"
-                       class="hover:text-blue-600 transition-colors">Experts</a>
-                </li>
-            </ul>
-        </nav>
-
         <!-- User Info -->
         <div class="flex items-center space-x-4">
             <span class="text-gray-800 font-medium">
@@ -47,7 +27,7 @@
             </span>
             <a href="${pageContext.request.contextPath}/logout"
                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition">
-                Logout
+                Logout <%-- todo: hide logout button if user no authenticated --%>
             </a>
         </div>
     </div>
