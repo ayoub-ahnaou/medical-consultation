@@ -40,7 +40,7 @@ public class MedicaleFile { // todo: update MedicaleFile typing to MedicalFile
     @JoinColumn(name = "consultation_id")
     private Consultation consultation;
 
-    @OneToMany(mappedBy = "medicalFile", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "medicaleFile", cascade = CascadeType.ALL)
     private List<Consultation> consultations = new ArrayList<>();
 
     public MedicaleFile(int id, double temperature, int pulse, int bloodPresure, int respiratoryRate, double oxygenSaturation, int pain) {
@@ -109,5 +109,29 @@ public class MedicaleFile { // todo: update MedicaleFile typing to MedicalFile
 
     public void setPain(int pain) {
         this.pain = pain;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Consultation getConsultation() {
+        return consultation;
+    }
+
+    public void setConsultation(Consultation consultation) {
+        this.consultation = consultation;
+    }
+
+    public List<Consultation> getConsultations() {
+        return consultations;
+    }
+
+    public void setConsultations(List<Consultation> consultations) {
+        this.consultations = consultations;
     }
 }

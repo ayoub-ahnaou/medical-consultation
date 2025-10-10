@@ -25,7 +25,7 @@ public class Consultation {
 
     @ManyToOne
     @JoinColumn(name = "medical_file_id", nullable = false)
-    private MedicaleFile medicalFile;
+    private MedicaleFile medicaleFile;
 
     @OneToMany(mappedBy = "consultation", cascade = CascadeType.ALL)
     private List<MedicaleAct> medicaleActs = new ArrayList<>();
