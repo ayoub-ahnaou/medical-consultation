@@ -27,8 +27,8 @@ public class Patient extends Person {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Ticket> tickets = new ArrayList<>();
 
-    public Patient(int id, String firstName, String lastName, String username, String password, String phone, Gender gender, LocalDate createdAt, Role role, String dossierNumber, LocalDate dateOfBirth, double height, double weight) {
-        super(id, firstName, lastName, username, password, phone, gender, createdAt, role);
+    public Patient(String firstName, String lastName, String username, String password, String phone, Gender gender, Role role, String dossierNumber, LocalDate dateOfBirth, double height, double weight) {
+        super(firstName, lastName, username, password, phone, gender, role);
         this.dossierNumber = dossierNumber;
         this.dateOfBirth = dateOfBirth;
         this.height = height;

@@ -10,8 +10,8 @@ import java.time.LocalDate;
 @Table(name = "nurses")
 public class Nurse extends Person {
 
-    public Nurse(int id, String firstName, String lastName, String username, String password, String phone, Gender gender, LocalDate createdAt, Role role) {
-        super(id, firstName, lastName, username, password, phone, gender, createdAt, role);
+    public Nurse(String firstName, String lastName, String username, String password, String phone, Gender gender, Role role) {
+        super(firstName, lastName, username, password, phone, gender, role);
     }
 
     public Nurse() {}

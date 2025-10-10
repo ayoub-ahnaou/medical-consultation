@@ -26,8 +26,8 @@ public class Specialist extends Person{
     @OneToMany(mappedBy = "specialist", cascade = CascadeType.ALL)
     private List<Request> requests = new ArrayList<>();
 
-    public Specialist(int id, String firstName, String lastName, String username, String password, String phone, Gender gender, LocalDate createdAt, Role role, String numeroRPPS, Speciality speciality, double fee) {
-        super(id, firstName, lastName, username, password, phone, gender, createdAt, role);
+    public Specialist(String firstName, String lastName, String username, String password, String phone, Gender gender, Role role, String numeroRPPS, Speciality speciality, double fee) {
+        super(firstName, lastName, username, password, phone, gender, role);
         this.numeroRPPS = numeroRPPS;
         this.speciality = speciality;
         this.fee = fee;

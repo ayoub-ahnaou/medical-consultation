@@ -38,15 +38,14 @@ public abstract class Person {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    public Person(int id, String firstName, String lastName, String username, String password, String phone, Gender gender, LocalDate createdAt, Role role) {
-        this.id = id;
+    public Person(String firstName, String lastName, String username, String password, String phone, Gender gender, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.phone = phone;
         this.gender = gender;
-        this.createdAt = createdAt;
+        this.createdAt = LocalDate.now();
         this.role = role;
     }
 

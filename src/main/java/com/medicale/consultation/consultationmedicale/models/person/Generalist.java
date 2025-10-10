@@ -27,8 +27,8 @@ public class Generalist extends Person {
     @OneToMany(mappedBy = "generalist")
     private List<Consultation> consultations = new ArrayList<>(); // todo: verify this shit, ain't correct by the first time
 
-    public Generalist(int id, String firstName, String lastName, String username, String password, String phone, Gender gender, LocalDate createdAt, Role role, String numeroRPPS, String address, String city, double fee) {
-        super(id, firstName, lastName, username, password, phone, gender, createdAt, role);
+    public Generalist(String firstName, String lastName, String username, String password, String phone, Gender gender, Role role, String numeroRPPS, String address, String city, double fee) {
+        super(firstName, lastName, username, password, phone, gender, role);
         this.numeroRPPS = numeroRPPS;
         this.address = address;
         this.city = city;
