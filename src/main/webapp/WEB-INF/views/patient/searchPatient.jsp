@@ -1,7 +1,12 @@
 <div class="bg-white rounded-xl shadow-md p-6">
-    <h2 class="text-xl font-semibold text-blue-700 mb-4 flex items-center">
-        <i class="fas fa-search mr-2"></i>Rechercher un patient
-    </h2>
+    <div class="font-semibold text-blue-700 mb-4 flex items-center justify-between py-2">
+        <p class="text-xl">Rechercher un patient</p>
+
+        <a href="${pageContext.request.contextPath}/addPatient"
+           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition duration-200 flex items-center">
+            <p>Créer un nouveau patient</p>
+        </a>
+    </div>
 
     <form action="${pageContext.request.contextPath}/searchPatient" method="get" class="mb-6">
         <div class="flex">
@@ -10,7 +15,7 @@
                    class="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
             <button type="submit"
                     class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition duration-200 flex items-center">
-                <i class="fas fa-search mr-2"></i>Rechercher
+                Rechercher
             </button>
         </div>
     </form>
