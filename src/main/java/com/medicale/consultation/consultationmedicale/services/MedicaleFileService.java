@@ -14,6 +14,10 @@ public class MedicaleFileService {
         repository.save(file);
     }
 
+    public void update(MedicaleFile file) {
+        repository.update(file);
+    }
+
     public MedicaleFile findByPatientId(int patientId) {
         return repository.findByPatientId(patientId);
     }
