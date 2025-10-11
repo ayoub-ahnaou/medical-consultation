@@ -4,6 +4,7 @@ import com.medicale.consultation.consultationmedicale.models.person.Patient;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tickets")
@@ -12,19 +13,15 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "ticket_order", nullable = false)
-    private int order;
-
     @Column(nullable = false, name = "created_at")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
-    public Ticket(int id, int order, LocalDate createdAt) {
-        this.id = id;
-        this.order = order;
+    public Ticket(Patient patient, LocalDateTime createdAt) {
+        this.patient = patient;
         this.createdAt = createdAt;
     }
 
@@ -38,19 +35,19 @@ public class Ticket {
         this.id = id;
     }
 
-    public int getOrder() {
-        return order;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
-    }
-
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 }
