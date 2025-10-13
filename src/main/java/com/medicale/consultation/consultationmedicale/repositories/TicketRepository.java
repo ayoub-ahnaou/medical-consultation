@@ -27,4 +27,9 @@ public class TicketRepository {
         TypedQuery<Ticket> query = em.createQuery("SELECT t FROM Ticket t", Ticket.class);
         return query.getResultList();
     }
+
+    public List<Ticket> findAllByDateDesc() {
+        return em.createQuery("SELECT t FROM Ticket t WHERE FUNCTION('DATE', t.createdAt) = CURRENT_DATE ORDER BY t.createdAt DESC", Ticket.class)
+                .getResultList();
+    }
 }

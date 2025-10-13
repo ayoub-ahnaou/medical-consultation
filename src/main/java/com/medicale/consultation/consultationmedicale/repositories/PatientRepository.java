@@ -38,7 +38,6 @@ public class PatientRepository {
 
     public List<Patient> findAll() {
         TypedQuery<Patient> query = em.createQuery("SELECT p FROM Patient p", Patient.class);
-        ;
         return query.getResultList();
     }
 }
