@@ -25,7 +25,7 @@ public class AddMedicaleFileServlet extends BaseServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        this.medicaleFileService = new MedicaleFileService(new MedicaleFileRepository(JPAUtils.getEntityManager()));
+        this.medicaleFileService = new MedicaleFileService(JPAUtils.getEntityManager());
         this.patientService = new PatientService(JPAUtils.getEntityManager());
         this.ticketService = new TicketService(JPAUtils.getEntityManager());
     }
