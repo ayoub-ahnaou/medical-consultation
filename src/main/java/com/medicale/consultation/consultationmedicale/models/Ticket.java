@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "tickets")
@@ -49,5 +50,10 @@ public class Ticket {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public String getFormattedTime() {
+        if (createdAt == null) return "";
+        return createdAt.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 }
