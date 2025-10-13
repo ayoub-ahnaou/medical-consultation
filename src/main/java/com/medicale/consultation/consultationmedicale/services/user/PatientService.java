@@ -7,6 +7,7 @@ import com.medicale.consultation.consultationmedicale.repositories.PatientReposi
 import jakarta.persistence.EntityManager;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class PatientService {
     private PatientRepository patientRepository;
@@ -35,5 +36,9 @@ public class PatientService {
         Patient patient = new Patient(firstName, lastName, username, password, phone, gender, role, dossierNumber, dateOfBirth, height, weight);
         patientRepository.save(patient);
         return patient;
+    }
+
+    public List<Patient> findAll() {
+        return patientRepository.findAll();
     }
 }
