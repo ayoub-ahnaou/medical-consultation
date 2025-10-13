@@ -9,29 +9,24 @@
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 </head>
-<body class="bg-gray-100 font-sans flex flex-col justify-between min-h-screen">
+<body class="bg-gray-50">
 
 <!-- Header -->
-<header class="bg-white shadow-md">
-    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
-
-        <!-- Logo -->
-        <div class="text-2xl font-bold text-blue-600">
-            Tele-Expertise
-        </div>
-
-        <!-- User Info -->
-        <div class="flex items-center space-x-4">
-            <span class="text-gray-800 font-medium">
-                Bienvenue, ${sessionScope.user != null ? sessionScope.user.lastName : 'Utilisateur'}
-            </span>
-            <a href="${pageContext.request.contextPath}/logout"
-               class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition">
-                Logout <%-- todo: hide logout button if user no authenticated --%>
-            </a>
+<nav class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-blue-600">Système Télé-Expertise</h1>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-sm text-gray-700">${sessionScope.user != null ? sessionScope.user.lastName : "Utilisateur"}</span>
+                <a href="${pageContext.request.contextPath}/logout"
+                   class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                    Déconnexion
+                </a>
+            </div>
         </div>
     </div>
-</header>
-
-<!-- Main Content -->
-<main class="container mx-auto px-6 py-6 flex-grow">
+</nav>
