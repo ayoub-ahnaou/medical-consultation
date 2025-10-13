@@ -28,4 +28,8 @@ public class TicketService {
         Ticket ticket = new Ticket(patient, LocalDateTime.now());
         ticketRepository.save(ticket);
     }
+
+    public List<Ticket> findAllByDateDesc() {
+        return ticketRepository.findAllByDateDesc();
+    }
 }
