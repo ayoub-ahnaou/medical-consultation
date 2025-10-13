@@ -2,6 +2,9 @@ package com.medicale.consultation.consultationmedicale.models.consultation;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "medicaleActs")
 public class MedicaleAct {
@@ -9,18 +12,16 @@ public class MedicaleAct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String label;
 
     @Column(nullable = false)
     private double price;
 
-    @ManyToOne
-    @JoinColumn(name = "consultation_id")
-    private Consultation consultation;
+    @ManyToMany(mappedBy = "medicaleActs")
+    private List<Consultation> consultations = new ArrayList<>();
 
-    public MedicaleAct(int id, String label, double price) {
-        this.id = id;
+    public MedicaleAct(String label, double price) {
         this.label = label;
         this.price = price;
     }
@@ -49,5 +50,13 @@ public class MedicaleAct {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public List<Consultation> getConsultations() {
+        return consultations;
+    }
+
+    public void setConsultations(List<Consultation> consultations) {
+        this.consultations = consultations;
     }
 }
