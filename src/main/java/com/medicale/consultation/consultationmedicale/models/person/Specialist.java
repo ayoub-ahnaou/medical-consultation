@@ -3,10 +3,9 @@ package com.medicale.consultation.consultationmedicale.models.person;
 import com.medicale.consultation.consultationmedicale.enums.Gender;
 import com.medicale.consultation.consultationmedicale.enums.Role;
 import com.medicale.consultation.consultationmedicale.enums.Speciality;
+import com.medicale.consultation.consultationmedicale.models.Agenda;
 import com.medicale.consultation.consultationmedicale.models.consultation.Request;
 import jakarta.persistence.*;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +24,9 @@ public class Specialist extends Person{
 
     @OneToMany(mappedBy = "specialist", cascade = CascadeType.ALL)
     private List<Request> requests = new ArrayList<>();
+
+    @OneToMany(mappedBy = "specialist", cascade = CascadeType.ALL)
+    private List<Agenda> agendas = new ArrayList<>();
 
     public Specialist(String firstName, String lastName, String username, String password, String phone, Gender gender, Role role, String numeroRPPS, Speciality speciality, double fee) {
         super(firstName, lastName, username, password, phone, gender, role);
