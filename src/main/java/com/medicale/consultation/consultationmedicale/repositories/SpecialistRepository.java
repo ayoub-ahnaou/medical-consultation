@@ -5,6 +5,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
+import java.util.List;
+
 public class SpecialistRepository {
     private EntityManager em;
 
@@ -24,5 +26,9 @@ public class SpecialistRepository {
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    public List<Specialist> findAll() {
+        return em.createQuery("SELECT s FROM Specialist s", Specialist.class).getResultList();
     }
 }

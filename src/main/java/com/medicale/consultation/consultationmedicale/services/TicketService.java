@@ -32,4 +32,8 @@ public class TicketService {
     public List<Ticket> findAllByDateDesc() {
         return ticketRepository.findAllByDateDesc();
     }
+
+    public void update(Ticket ticket) {
+        ticketRepository.update(ticket);
+    }
 }
