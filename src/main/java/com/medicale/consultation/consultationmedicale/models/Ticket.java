@@ -1,5 +1,6 @@
 package com.medicale.consultation.consultationmedicale.models;
 
+import com.medicale.consultation.consultationmedicale.enums.TicketStatus;
 import com.medicale.consultation.consultationmedicale.models.person.Patient;
 import jakarta.persistence.*;
 
@@ -21,9 +22,14 @@ public class Ticket {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 20)
+    private TicketStatus status;
+
     public Ticket(Patient patient, LocalDateTime createdAt) {
         this.patient = patient;
         this.createdAt = createdAt;
+        this.status = TicketStatus.ACTIVE;
     }
 
     public Ticket() {}
@@ -55,5 +61,13 @@ public class Ticket {
     public String getFormattedTime() {
         if (createdAt == null) return "";
         return createdAt.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    public TicketStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TicketStatus status) {
+        this.status = status;
     }
 }
