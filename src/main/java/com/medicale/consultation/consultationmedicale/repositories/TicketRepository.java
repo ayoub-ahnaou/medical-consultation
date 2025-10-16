@@ -23,6 +23,12 @@ public class TicketRepository {
         em.getTransaction().commit();
     }
 
+    public void update(Ticket ticket) {
+        em.getTransaction().begin();
+        em.merge(ticket);
+        em.getTransaction().commit();
+    }
+
     public List<Ticket> findAll() {
         TypedQuery<Ticket> query = em.createQuery("SELECT t FROM Ticket t", Ticket.class);
         return query.getResultList();
