@@ -17,6 +17,7 @@
 
         <class>com.medicale.consultation.consultationmedicale.models.Ticket</class>
         <class>com.medicale.consultation.consultationmedicale.models.MedicaleFile</class>
+        <class>com.medicale.consultation.consultationmedicale.models.Agenda</class>
 
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
