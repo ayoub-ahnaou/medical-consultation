@@ -2,14 +2,15 @@ package com.medicale.consultation.consultationmedicale.servlets.consultation;
 
 import com.medicale.consultation.consultationmedicale.config.JPAUtils;
 import com.medicale.consultation.consultationmedicale.enums.ConsultationStatus;
+import com.medicale.consultation.consultationmedicale.enums.TicketStatus;
 import com.medicale.consultation.consultationmedicale.models.MedicaleFile;
+import com.medicale.consultation.consultationmedicale.models.Ticket;
 import com.medicale.consultation.consultationmedicale.models.consultation.Consultation;
 import com.medicale.consultation.consultationmedicale.models.consultation.MedicaleAct;
 import com.medicale.consultation.consultationmedicale.models.person.Generalist;
 import com.medicale.consultation.consultationmedicale.models.person.Patient;
-import com.medicale.consultation.consultationmedicale.services.ConsultationService;
-import com.medicale.consultation.consultationmedicale.services.MedicaleActService;
-import com.medicale.consultation.consultationmedicale.services.MedicaleFileService;
+import com.medicale.consultation.consultationmedicale.models.person.Specialist;
+import com.medicale.consultation.consultationmedicale.services.*;
 import com.medicale.consultation.consultationmedicale.services.user.PatientService;
 import com.medicale.consultation.consultationmedicale.servlets.BaseServlet;
 import jakarta.servlet.ServletException;
@@ -27,6 +28,8 @@ public class ConsultationServlet extends BaseServlet {
     private MedicaleFileService medicaleFileService;
     private ConsultationService consultationService;
     private MedicaleActService medicaleActService;
+    private TicketService ticketService;
+    private SpecialistService specialistService;
 
     @Override
     public void init() {
@@ -34,6 +37,8 @@ public class ConsultationServlet extends BaseServlet {
         this.medicaleFileService = new MedicaleFileService(JPAUtils.getEntityManager());
         this.consultationService = new ConsultationService(JPAUtils.getEntityManager());
         this.medicaleActService = new MedicaleActService(JPAUtils.getEntityManager());
+        this.ticketService = new TicketService(JPAUtils.getEntityManager());
+        this.specialistService = new SpecialistService(JPAUtils.getEntityManager());
     }
 
     @Override
@@ -59,6 +64,7 @@ public class ConsultationServlet extends BaseServlet {
                 return;
             }
 
+            List<Specialist> specialists = specialistService.getAllSpecialists();
             // Get medical file for this patient
             MedicaleFile medicalFile = medicaleFileService.findByPatientId(patientId);
             Generalist generalist = (Generalist) getUser(request);
@@ -78,6 +84,7 @@ public class ConsultationServlet extends BaseServlet {
             request.setAttribute("patient", patient);
             request.setAttribute("medicalFile", medicalFile);
             request.setAttribute("consultation", consultation);
+            request.setAttribute("specialists", specialists);
 
             // Forward to JSP page
             request.getRequestDispatcher("/WEB-INF/views/consultation/consultationDetails.jsp")
@@ -131,12 +138,18 @@ public class ConsultationServlet extends BaseServlet {
             // --- Si l’action est de terminer la consultation ---
             if ("complete".equals(action)) {
                 consultation.setFeedback(feedback);
-                consultation.setMedicaleActs(new ArrayList<>(acts)); // <-- ✅ assigner les actes sélectionnés
+                consultation.setMedicaleActs(new ArrayList<>(acts));
                 consultation.setConsultationStatus(ConsultationStatus.COMPLETED);
                 consultation.setTotalPrice(totalPrice);
 
                 // --- Persister les changements ---
                 consultationService.update(consultation);
+
+                List<Ticket> tickets = consultation.getMedicaleFile().getPatient().getTickets();
+                Ticket ticket = tickets.get(tickets.size() - 1);
+
+                ticket.setStatus(TicketStatus.COMPLETED);
+                ticketService.update(ticket);
 
                 request.setAttribute("message", "Consultation completed successfully!");
                 request.setAttribute("consultation", consultation);
