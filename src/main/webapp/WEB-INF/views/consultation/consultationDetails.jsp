@@ -147,12 +147,9 @@
                         </label>
                         <select name="specialistId"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">-- Select a specialist --</option>
-                            <option value="1">Dr. Smith - Cardiology</option>
-                            <option value="2">Dr. Johnson - Neurology</option>
-                            <option value="3">Dr. Williams - Dermatology</option>
-                            <option value="4">Dr. Brown - Orthopedics</option>
-                            <option value="5">Dr. Davis - Pediatrics</option>
+                            <c:forEach items="${specialists}" var="specialist">
+                                <option value="${specialist.id}">Dr. ${specialist.firstName} - ${specialist.speciality}</option>
+                            </c:forEach>
                         </select>
                     </div>
                 </div>
