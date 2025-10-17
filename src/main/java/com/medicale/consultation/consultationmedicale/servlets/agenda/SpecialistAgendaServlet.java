@@ -45,7 +45,7 @@ public class SpecialistAgendaServlet extends BaseServlet {
 
         List<Agenda> agendas = agendaService.getAllAgenda();
         req.setAttribute("agendas", agendas);
-        req.getRequestDispatcher("/WEB-INF/views/specialist/list_agenda.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/specialist/dashboard.jsp").forward(req, resp);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class SpecialistAgendaServlet extends BaseServlet {
             // Succès : message + redirection
             req.getSession().setAttribute("message",
                     "Agenda successfully created for the week of " + referenceDate);
-            resp.sendRedirect(req.getContextPath() + "/specialist/agenda/list");
+            resp.sendRedirect(req.getContextPath() + "/dashboard/specialist/agenda");
 
         } catch (Exception e) {
             throw new ServletException(e);
