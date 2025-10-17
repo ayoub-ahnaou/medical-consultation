@@ -31,4 +31,8 @@ public class SpecialistRepository {
     public List<Specialist> findAll() {
         return em.createQuery("SELECT s FROM Specialist s", Specialist.class).getResultList();
     }
+
+    public Specialist getSpecialistById(int specialistId) {
+        return em.find(Specialist.class, specialistId);
+    }
 }

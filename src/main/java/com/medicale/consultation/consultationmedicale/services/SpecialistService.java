@@ -16,4 +16,8 @@ public class SpecialistService {
     public List<Specialist> getAllSpecialists() {
         return this.specialistRepository.findAll();
     }
+
+    public Specialist getSpecialistById(int specialistId) {
+        return this.specialistRepository.getSpecialistById(specialistId);
+    }
 }
