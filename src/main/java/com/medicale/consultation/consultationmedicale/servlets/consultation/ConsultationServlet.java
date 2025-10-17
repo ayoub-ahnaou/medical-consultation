@@ -64,25 +64,40 @@ public class ConsultationServlet extends BaseServlet {
                 return;
             }
 
-            List<Specialist> specialists = specialistService.getAllSpecialists();
-            // Get medical file for this patient
-            MedicaleFile medicalFile = medicaleFileService.findByPatientId(patientId);
             Generalist generalist = (Generalist) getUser(request);
+            List<Specialist> specialists = specialistService.getAllSpecialists();
 
-            Consultation consultation = new Consultation();
-            consultation.setCreatedAt(LocalDateTime.now());
-            consultation.setConsultationStatus(ConsultationStatus.WAITING);
-            consultation.setFeedback("");
-            consultation.setMedicaleFile(medicalFile);
-            consultation.setMedicaleActs(Collections.emptyList());
-            consultation.setGeneralist(generalist);
-            consultation.setTotalPrice(generalist.getFee());
+            // VÉRIFIER SI UNE CONSULTATION EN ATTENTE EXISTE DÉJÀ
+            Consultation existingConsultation = consultationService.findPendingConsultationByPatientAndGeneralist(
+                    patientId, generalist.getId()
+            );
 
-            consultationService.create(consultation);
+            Consultation consultation;
+
+            if (existingConsultation != null) {
+                // Utiliser la consultation existante
+                consultation = existingConsultation;
+                System.out.println("Consultation en attente trouvée, réutilisation: " + consultation.getId());
+            } else {
+                // Créer une nouvelle consultation
+                MedicaleFile medicalFile = medicaleFileService.findByPatientId(patientId);
+
+                consultation = new Consultation();
+                consultation.setCreatedAt(LocalDateTime.now());
+                consultation.setConsultationStatus(ConsultationStatus.WAITING);
+                consultation.setFeedback("");
+                consultation.setMedicaleFile(medicalFile);
+                consultation.setMedicaleActs(Collections.emptyList());
+                consultation.setGeneralist(generalist);
+                consultation.setTotalPrice(generalist.getFee());
+
+                consultationService.create(consultation);
+                System.out.println("Nouvelle consultation créée: " + consultation.getId());
+            }
 
             // Pass data to JSP
             request.setAttribute("patient", patient);
-            request.setAttribute("medicalFile", medicalFile);
+            request.setAttribute("medicalFile", consultation.getMedicaleFile());
             request.setAttribute("consultation", consultation);
             request.setAttribute("specialists", specialists);
 
@@ -156,15 +171,6 @@ public class ConsultationServlet extends BaseServlet {
                 request.setAttribute("totalPrice", totalPrice);
                 request.getRequestDispatcher("/WEB-INF/views/consultation/success.jsp").forward(request, response);
 
-            } else if ("refer".equals(action)) {
-                String specialistIdParam = request.getParameter("specialistId");
-                if (specialistIdParam != null && !specialistIdParam.isEmpty()) {
-                    int specialistId = Integer.parseInt(specialistIdParam);
-                    // consultationService.referToSpecialist(consultationId, specialistId, feedback);
-                }
-
-                request.setAttribute("message", "Consultation referred to a specialist.");
-                request.getRequestDispatcher("/WEB-INF/views/consultation/success.jsp").forward(request, response);
             }
 
         } catch (Exception e) {

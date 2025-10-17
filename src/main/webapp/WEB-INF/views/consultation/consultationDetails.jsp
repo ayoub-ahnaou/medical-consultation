@@ -145,13 +145,45 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Select Specialist
                         </label>
-                        <select name="specialistId"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <select name="specialistId" id="specialistSelect"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                onchange="showAgendaForSpecialist(this.value)">
+                            <option value="">-- Sélectionner un spécialiste --</option>
                             <c:forEach items="${specialists}" var="specialist">
-                                <option value="${specialist.id}">Dr. ${specialist.firstName} - ${specialist.speciality}</option>
+                                <option value="${specialist.id}">Dr. ${specialist.firstName}
+                                    - ${specialist.speciality}</option>
                             </c:forEach>
                         </select>
                     </div>
+                </div>
+
+                <div id="agendaSection" class="mt-4" style="display: none;">
+                    <h4 class="text-md font-semibold text-gray-700 mb-2">Disponibilités du spécialiste</h4>
+
+                    <c:forEach items="${specialists}" var="specialist">
+                        <c:if test="${not empty specialist.agendas}">
+                            <div id="agendas-${specialist.id}"
+                                 class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                <c:forEach items="${specialist.agendas}" var="agenda">
+                                    <label class="flex items-center p-3 border rounded-lg shadow-sm bg-gray-50 hover:bg-gray-100 cursor-pointer">
+                                        <input type="radio" name="agendaId" value="${agenda.id}"
+                                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mr-3">
+                                        <div>
+                                            <p class="text-gray-800 font-medium">${agenda.date}</p>
+                                            <p class="text-gray-500 text-sm">${agenda.startTime} - ${agenda.endTime}</p>
+                                            <c:if test="${not agenda.available}">
+                                                <p class="text-red-500 text-xs font-medium">(Indisponible)</p>
+                                            </c:if>
+                                        </div>
+                                    </label>
+                                </c:forEach>
+                            </div>
+                        </c:if>
+                        <c:if test="${empty specialist.agendas}">
+                            <p id="agendas-${specialist.id}" class="hidden text-gray-500 italic">Aucun agenda
+                                disponible.</p>
+                        </c:if>
+                    </c:forEach>
                 </div>
             </div>
         </div>
@@ -163,10 +195,10 @@
                 Complete Consultation
             </button>
 
-            <button type="submit" name="action" value="refer"
-                    class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <a href="${pageContext.request.contextPath}/consultation/refer?consultationId=${consultation.id}&generalistId=${sessionScope.user.id}"
+               class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 Send to Specialist
-            </button>
+            </a>
         </div>
     </form>
 
@@ -183,11 +215,11 @@
         }
 
         // Initialize form state
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             toggleSpecialistSelection();
 
             // If there are previously selected medical acts, restore them
-            const selectedActs = [<c:forEach var="act" items="${selectedActs}">"${act}",</c:forEach>];
+            const selectedActs = [<c:forEach var="act" items="${selectedActs}">"${act}", </c:forEach>];
             const selectElement = document.querySelector('select[name="medicalActs"]');
 
             selectedActs.forEach(actId => {
@@ -197,5 +229,22 @@
                 }
             });
         });
+
+        function showAgendaForSpecialist(specialistId) {
+            // Cache tout d’abord toutes les sections d’agendas
+            document.querySelectorAll('[id^="agendas-"]').forEach(el => el.classList.add('hidden'));
+            document.getElementById('agendaSection').classList.add('hidden');
+
+            if (!specialistId) return;
+
+            // Montre seulement les agendas du spécialiste choisi
+            const selectedAgendaDiv = document.getElementById(`agendas-${specialistId}`);
+            if (selectedAgendaDiv) {
+                selectedAgendaDiv.classList.remove('hidden');
+                document.getElementById('agendaSection').classList.remove('hidden');
+            }
+        }
     </script>
 </div>
+</body>
+</html>
