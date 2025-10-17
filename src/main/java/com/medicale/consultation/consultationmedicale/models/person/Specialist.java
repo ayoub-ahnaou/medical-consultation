@@ -60,4 +60,20 @@ public class Specialist extends Person{
     public void setFee(double fee) {
         this.fee = fee;
     }
+
+    public List<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
+    }
+
+    public List<Agenda> getAgendas() {
+        return agendas;
+    }
+
+    public void setAgendas(List<Agenda> agendas) {
+        this.agendas = agendas;
+    }
 }
