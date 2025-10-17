@@ -22,10 +22,10 @@ public class Specialist extends Person{
     @Column(nullable = false)
     private double fee;
 
-    @OneToMany(mappedBy = "specialist", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "specialist", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Request> requests = new ArrayList<>();
 
-    @OneToMany(mappedBy = "specialist", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "specialist", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Agenda> agendas = new ArrayList<>();
 
     public Specialist(String firstName, String lastName, String username, String password, String phone, Gender gender, Role role, String numeroRPPS, Speciality speciality, double fee) {
