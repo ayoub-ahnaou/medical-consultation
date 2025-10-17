@@ -23,6 +23,9 @@ public class Agenda {
     @Column(nullable = false)
     private LocalTime endTime;
 
+    @Column(nullable = false)
+    private boolean available = true;
+
     @ManyToOne
     @JoinColumn(name = "specialist_id", nullable = false)
     private Specialist specialist;
@@ -31,10 +34,11 @@ public class Agenda {
     public Agenda() {
     }
 
-    public Agenda(LocalDate date, LocalTime startTime, LocalTime endTime, Specialist specialist) {
+    public Agenda(LocalDate date, LocalTime startTime, LocalTime endTime, boolean available, Specialist specialist) {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.available = available;
         this.specialist = specialist;
     }
 
@@ -68,6 +72,14 @@ public class Agenda {
 
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     public Specialist getSpecialist() {
