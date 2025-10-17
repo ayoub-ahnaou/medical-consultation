@@ -36,7 +36,7 @@ public class SpecialistAgendaServlet extends BaseServlet {
             throws ServletException, IOException {
 
         HttpSession session = req.getSession(false);
-        Integer specialistId = (Integer) session.getAttribute("specialistId");
+        Integer specialistId = (Integer) session.getAttribute("userId");
 
         if (specialistId == null) {
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Specialist not logged in");
@@ -134,7 +134,7 @@ public class SpecialistAgendaServlet extends BaseServlet {
             // Succès : message + redirection
             req.getSession().setAttribute("message",
                     "Agenda successfully created for the week of " + referenceDate);
-            resp.sendRedirect(req.getContextPath() + "/dashboard/specialist/agenda");
+            resp.sendRedirect(req.getContextPath() + "/dashboard/specialists/agenda");
 
         } catch (Exception e) {
             throw new ServletException(e);

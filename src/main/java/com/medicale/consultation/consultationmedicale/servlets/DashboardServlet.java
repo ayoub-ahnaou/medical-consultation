@@ -4,8 +4,13 @@ import com.medicale.consultation.consultationmedicale.config.JPAUtils;
 import com.medicale.consultation.consultationmedicale.enums.Role;
 import com.medicale.consultation.consultationmedicale.models.Agenda;
 import com.medicale.consultation.consultationmedicale.models.Ticket;
+import com.medicale.consultation.consultationmedicale.models.consultation.Consultation;
+import com.medicale.consultation.consultationmedicale.models.consultation.Request;
 import com.medicale.consultation.consultationmedicale.models.person.Patient;
+import com.medicale.consultation.consultationmedicale.models.person.Person;
 import com.medicale.consultation.consultationmedicale.models.person.Specialist;
+import com.medicale.consultation.consultationmedicale.services.ConsultationService;
+import com.medicale.consultation.consultationmedicale.services.RequestService;
 import com.medicale.consultation.consultationmedicale.services.SpecialistService;
 import com.medicale.consultation.consultationmedicale.services.TicketService;
 import com.medicale.consultation.consultationmedicale.services.user.PatientService;
@@ -23,6 +28,8 @@ public class DashboardServlet extends BaseServlet{
     private TicketService  ticketService;
     private PatientService patientService;
     private SpecialistService specialistService;
+    private ConsultationService consultationService;
+    private RequestService requestService;
 
     @Override
     public void init() throws ServletException {
@@ -30,6 +37,8 @@ public class DashboardServlet extends BaseServlet{
         this.ticketService = new TicketService(JPAUtils.getEntityManager());
         this.patientService = new PatientService(JPAUtils.getEntityManager());
         this.specialistService = new SpecialistService(JPAUtils.getEntityManager());
+        this.consultationService = new ConsultationService(JPAUtils.getEntityManager());
+        this.requestService = new RequestService(JPAUtils.getEntityManager());
     }
 
     @Override
@@ -41,6 +50,8 @@ public class DashboardServlet extends BaseServlet{
             return;
         }
 
+        Person currentUser = (Person) req.getSession().getAttribute("user");
+
         String role = session.getAttribute("userRole").toString();
 
         switch (role) {
@@ -50,15 +61,29 @@ public class DashboardServlet extends BaseServlet{
                 req.getRequestDispatcher("/WEB-INF/views/nurse/dashboard.jsp").forward(req, resp);
             }
             case "GENERALIST" -> {
-                List<Ticket> tickets = ticketService.findAllByDateDesc();
-                req.setAttribute("tickets", tickets);
-                req.getRequestDispatcher("/WEB-INF/views/generalist/dashboard.jsp").forward(req, resp);
+                try {
+                    List<Ticket> tickets = ticketService.findAllByDateDesc();
+                    req.setAttribute("tickets", tickets);
+                    // Récupérer les consultations du médecin
+                    List<Consultation> consultations = consultationService.getConsultationsByDoctor((int) session.getAttribute("userId"));
+                    req.setAttribute("consultations", consultations);
+
+                    // Récupérer les demandes d'expertise
+                    List<Request> requests = requestService.getRequestsByGeneralist(currentUser.getId());
+                    req.setAttribute("requests", requests);
+                    req.getRequestDispatcher("/WEB-INF/views/generalist/dashboard.jsp").forward(req, resp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             case "SPECIALIST" ->{
                 int specialistId = (int) session.getAttribute("userId");
                 Specialist specialist = specialistService.getSpecialistById(specialistId);
                 List<Agenda> agendas = specialist.getAgendas();
+                List<Request> requests = specialist.getRequests();
+
                 req.setAttribute("agendas", agendas);
+                req.setAttribute("requests", requests);
 
                 req.getRequestDispatcher("/WEB-INF/views/specialist/dashboard.jsp").forward(req, resp);
             }

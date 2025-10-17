@@ -29,7 +29,7 @@ public class SpecialistRepository {
     }
 
     public List<Specialist> findAll() {
-        return em.createQuery("SELECT s FROM Specialist s", Specialist.class).getResultList();
+        return em.createQuery("SELECT DISTINCT s FROM Specialist s LEFT JOIN FETCH s.agendas", Specialist.class).getResultList();
     }
 
     public Specialist getSpecialistById(int specialistId) {
