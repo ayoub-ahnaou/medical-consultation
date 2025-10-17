@@ -5,6 +5,8 @@ import com.medicale.consultation.consultationmedicale.models.person.Specialist;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "requests")
@@ -14,10 +16,10 @@ public class Request {
     private int id;
 
     @Column(nullable = false, name = "created_at")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false, name = "consultation_date")
-    private LocalDate consultationDate;
+    private LocalDateTime consultationDate;
 
     @Column(nullable = false)
     private String description;
@@ -37,9 +39,8 @@ public class Request {
     @JoinColumn(name = "specialist_id", nullable = false)
     private Specialist specialist;
 
-    public Request(int id, LocalDate createdAt, LocalDate consultationDate, String description, double cost, RequestStatus requestStatus) {
-        this.id = id;
-        this.createdAt = createdAt;
+    public Request(LocalDateTime consultationDate, String description, double cost, RequestStatus requestStatus) {
+        this.createdAt = LocalDateTime.now();
         this.consultationDate = consultationDate;
         this.description = description;
         this.cost = cost;
@@ -56,19 +57,19 @@ public class Request {
         this.id = id;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDate getConsultationDate() {
+    public LocalDateTime getConsultationDate() {
         return consultationDate;
     }
 
-    public void setConsultationDate(LocalDate consultationDate) {
+    public void setConsultationDate(LocalDateTime consultationDate) {
         this.consultationDate = consultationDate;
     }
 
@@ -110,5 +111,10 @@ public class Request {
 
     public void setSpecialist(Specialist specialist) {
         this.specialist = specialist;
+    }
+
+    public String getFormattedConsultationDate() {
+        if (createdAt == null) return "";
+        return consultationDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
     }
 }
