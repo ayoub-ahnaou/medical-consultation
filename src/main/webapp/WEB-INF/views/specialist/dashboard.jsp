@@ -28,150 +28,146 @@
             </div>
         </div>
 
-        <!-- Expertises Tab -->
+        <!-- Expertises Tab - Specialist View -->
         <div id="content-expertises" class="tab-content">
             <div class="space-y-4">
-                <!-- Expertise Card 1 - URGENTE -->
-                <div class="bg-white rounded-lg shadow overflow-hidden border-l-4 border-red-500">
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex-1">
-                                <div class="flex items-center gap-3 mb-2">
-                                    <h3 class="text-lg font-semibold text-gray-900">Samira Benjelloun</h3>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">EN ATTENTE</span>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">URGENTE</span>
-                                </div>
-                                <p class="text-sm text-gray-600 mb-3">27 ans • Demande reçue le 11/10/2025 à 09:15</p>
+                <c:choose>
+                    <c:when test="${not empty requests}">
+                        <c:forEach var="request" items="${requests}">
+                            <!-- Request Card -->
+                            <div class="bg-white rounded-lg shadow overflow-hidden border-l-4 ${request.requestStatus.name() == 'URGENT' ? 'border-red-500' :
+                    request.requestStatus.name() == 'NORMAL' ? 'border-blue-500' : 'border-gray-500'}">
+                                <div class="p-6">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div class="flex-1">
+                                            <!-- Patient Name and Status -->
+                                            <div class="flex items-center gap-3 mb-2">
+                                                <h3 class="text-lg font-semibold text-gray-900">
+                                                        ${request.consultation.medicaleFile.patient.firstName} ${request.consultation.medicaleFile.patient.lastName}
+                                                </h3>
+                                                <!-- Request Status Badge -->
+                                                <span class="px-2 py-1 text-xs font-semibold rounded-full ${request.requestStatus.name() == 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                                        request.requestStatus.name() == 'ACCEPTED' ? 'bg-green-100 text-green-800' :
+                                        request.requestStatus.name() == 'REJECTED' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'}">
+                                            <c:choose>
+                                                <c:when test="${request.requestStatus.name() == 'PENDING'}">EN ATTENTE</c:when>
+                                                <c:when test="${request.requestStatus.name() == 'ACCEPTED'}">ACCEPTÉE</c:when>
+                                                <c:when test="${request.requestStatus.name() == 'REJECTED'}">REJETÉE</c:when>
+                                                <c:otherwise>${request.requestStatus}</c:otherwise>
+                                            </c:choose>
+                                        </span>
+                                                <!-- Priority Badge -->
+                                                <span class="px-2 py-1 text-xs font-semibold rounded-full ${request.description.contains('URGENTE') || request.description.contains('URGENT') ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}">
+                                            URGENTE
+                                        </span>
+                                            </div>
 
-                                <div class="grid grid-cols-2 gap-4 mb-4">
-                                    <div>
-                                        <p class="text-xs font-medium text-gray-500 mb-1">Médecin Généraliste</p>
-                                        <p class="text-sm text-gray-900">Dr. Hassan Tazi</p>
+                                            <!-- Patient Age and Request Date -->
+                                            <c:set var="now" value="<%= java.time.LocalDate.now() %>"/>
+                                            <c:set var="birthDate"
+                                                   value="${request.consultation.medicaleFile.patient.dateOfBirth}"/>
+                                            <c:set var="age"
+                                                   value="${now.year - birthDate.year - ((now.monthValue > birthDate.monthValue || (now.monthValue == birthDate.monthValue && now.dayOfMonth >= birthDate.dayOfMonth)) ? 0 : 1)}"/>
+                                            <p class="text-sm text-gray-600 mb-3">
+                                                    ${age} ans • Demande reçue le <fmt:formatDate
+                                                    value="${request.createdAt}" pattern="dd/MM/yyyy"/> à
+                                                <fmt:formatDate value="${request.createdAt}" pattern="HH:mm"/>
+                                            </p>
+
+                                            <!-- Generalist and Appointment Slot -->
+                                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                                <div>
+                                                    <p class="text-xs font-medium text-gray-500 mb-1">Médecin
+                                                        Généraliste</p>
+                                                    <p class="text-sm text-gray-900">
+                                                        Dr. ${request.consultation.generalist.lastName} ${request.consultation.generalist.firstName}
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-xs font-medium text-gray-500 mb-1">Créneau</p>
+                                                    <p class="text-sm text-gray-900">
+                                                        <fmt:formatDate value="${request.formattedConsultationDate}" pattern="dd/MM/yyyy"/>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Question/Description -->
+                                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                                <p class="text-sm font-medium text-gray-700 mb-2">Question posée:</p>
+                                                <p class="text-sm text-gray-600">${request.description}</p>
+                                            </div>
+
+                                            <!-- Patient Medical Information -->
+                                            <div class="bg-blue-50 p-4 rounded-lg">
+                                                <p class="text-sm font-medium text-gray-700 mb-2">Information patient:</p>
+                                                <div class="grid grid-cols-2 gap-3 text-sm text-gray-600">
+                                                    <div>
+                                                        <strong>Signes vitaux:</strong>
+                                                        TA: ${request.consultation.medicaleFile.bloodPresure} mmHg,
+                                                        Temp: ${request.consultation.medicaleFile.temperature}°C
+                                                    </div>
+                                                    <div>
+                                                        <strong>Pouls:</strong> ${request.consultation.medicaleFile.pulse}
+                                                        bpm
+                                                    </div>
+                                                    <div>
+                                                        <strong>SpO₂:</strong> ${request.consultation.medicaleFile.oxygenSaturation}%
+                                                    </div>
+                                                    <div>
+                                                        <strong>Douleur:</strong> ${request.consultation.medicaleFile.pain}/10
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p class="text-xs font-medium text-gray-500 mb-1">Créneau</p>
-                                        <p class="text-sm text-gray-900">11/10/2025 - 14:00 - 14:30</p>
-                                    </div>
-                                </div>
 
-                                <div class="bg-gray-50 p-4 rounded-lg mb-4">
-                                    <p class="text-sm font-medium text-gray-700 mb-2">Question posée:</p>
-                                    <p class="text-sm text-gray-600">Patiente présente une éruption cutanée avec
-                                        desquamation depuis 3 semaines. Pas de réponse aux corticoïdes topiques.
-                                        Diagnostic différentiel entre eczéma et psoriasis? Photos jointes dans le
-                                        dossier.</p>
-                                </div>
+                                    <!-- Action Footer -->
+                                    <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+                                        <p class="text-lg font-bold text-blue-600">${request.cost} DH</p>
+                                        <div class="flex gap-2">
+                                            <!-- Respond/Accept (if PENDING) -->
+                                            <c:if test="${request.requestStatus.name() == 'PENDING'}">
+                                                <a href="${pageContext.request.contextPath}/request/respond?id=${request.id}"
+                                                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">
+                                                    Répondre
+                                                </a>
+                                            </c:if>
 
-                                <div class="bg-blue-50 p-4 rounded-lg">
-                                    <p class="text-sm font-medium text-gray-700 mb-2">Informations patient:</p>
-                                    <div class="grid grid-cols-2 gap-3 text-sm text-gray-600">
-                                        <div><strong>Signes vitaux:</strong> TA: 110/70, Temp: 36.9°C</div>
-                                        <div><strong>Allergies:</strong> Aucune connue</div>
-                                        <div><strong>Antécédents:</strong> Rien à signaler</div>
-                                        <div><strong>Traitements:</strong> Dermocorticoïde en cours</div>
+                                            <!-- Already Accepted -->
+                                            <c:if test="${request.requestStatus.name() == 'IN_PROGRESS'}">
+                                                <button disabled
+                                                        class="bg-green-600 text-white px-6 py-2 rounded-lg font-medium opacity-75 cursor-not-allowed">
+                                                    In progress
+                                                </button>
+                                            </c:if>
+
+                                            <!-- Rejected -->
+                                            <c:if test="${request.requestStatus.name() == 'COMPLETED'}">
+                                                <button disabled
+                                                        class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium opacity-75 cursor-not-allowed">
+                                                    Completé
+                                                </button>
+                                            </c:if>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <!-- Empty State -->
+                        <div class="bg-white rounded-lg shadow p-12 text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                            </svg>
+                            <h3 class="mt-2 text-sm font-medium text-gray-900">Aucune demande d'expertise</h3>
+                            <p class="mt-1 text-sm text-gray-500">Vous n'avez aucune demande d'expertise en attente pour
+                                le moment.</p>
                         </div>
-
-                        <div class="flex justify-between items-center pt-4 border-t border-gray-200">
-                            <p class="text-lg font-bold text-blue-600">300 DH</p>
-                            <button onclick="respondExpertise(1)"
-                                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">
-                                Répondre
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Expertise Card 2 - NORMALE -->
-                <div class="bg-white rounded-lg shadow overflow-hidden border-l-4 border-blue-500">
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex-1">
-                                <div class="flex items-center gap-3 mb-2">
-                                    <h3 class="text-lg font-semibold text-gray-900">Fatima El Amrani</h3>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">EN ATTENTE</span>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">NORMALE</span>
-                                </div>
-                                <p class="text-sm text-gray-600 mb-3">32 ans • Demande reçue le 11/10/2025 à 10:30</p>
-
-                                <div class="grid grid-cols-2 gap-4 mb-4">
-                                    <div>
-                                        <p class="text-xs font-medium text-gray-500 mb-1">Médecin Généraliste</p>
-                                        <p class="text-sm text-gray-900">Dr. Karim Idrissi</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs font-medium text-gray-500 mb-1">Créneau</p>
-                                        <p class="text-sm text-gray-900">12/10/2025 - 10:00 - 10:30</p>
-                                    </div>
-                                </div>
-
-                                <div class="bg-gray-50 p-4 rounded-lg mb-4">
-                                    <p class="text-sm font-medium text-gray-700 mb-2">Question posée:</p>
-                                    <p class="text-sm text-gray-600">Acné kystique résistante aux traitements locaux.
-                                        Envisager isotrétinoïne? Bilan hépatique et lipidique joints.</p>
-                                </div>
-
-                                <div class="bg-blue-50 p-4 rounded-lg">
-                                    <p class="text-sm font-medium text-gray-700 mb-2">Données et analyses:</p>
-                                    <p class="text-sm text-gray-600">Bilan hépatique normal. Cholestérol: 1.8g/L.
-                                        Triglycérides: 0.9g/L. Échographie hépatique normale.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-between items-center pt-4 border-t border-gray-200">
-                            <p class="text-lg font-bold text-blue-600">300 DH</p>
-                            <button onclick="respondExpertise(2)"
-                                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">
-                                Répondre
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Expertise Card 3 - NON URGENTE -->
-                <div class="bg-white rounded-lg shadow overflow-hidden border-l-4 border-green-500">
-                    <div class="p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex-1">
-                                <div class="flex items-center gap-3 mb-2">
-                                    <h3 class="text-lg font-semibold text-gray-900">Mohammed Alami</h3>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">EN ATTENTE</span>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">NON URGENTE</span>
-                                </div>
-                                <p class="text-sm text-gray-600 mb-3">52 ans • Demande reçue le 10/10/2025 à 16:45</p>
-
-                                <div class="grid grid-cols-2 gap-4 mb-4">
-                                    <div>
-                                        <p class="text-xs font-medium text-gray-500 mb-1">Médecin Généraliste</p>
-                                        <p class="text-sm text-gray-900">Dr. Hassan Tazi</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs font-medium text-gray-500 mb-1">Créneau</p>
-                                        <p class="text-sm text-gray-900">13/10/2025 - 15:00 - 15:30</p>
-                                    </div>
-                                </div>
-
-                                <div class="bg-gray-50 p-4 rounded-lg">
-                                    <p class="text-sm font-medium text-gray-700 mb-2">Question posée:</p>
-                                    <p class="text-sm text-gray-600">Grain de beauté suspect sur le dos, évolution
-                                        depuis 6 mois. Critères ABCDE: asymétrie et bords irréguliers. Avis pour
-                                        biopsie?</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-between items-center pt-4 border-t border-gray-200">
-                            <p class="text-lg font-bold text-blue-600">300 DH</p>
-                            <button onclick="respondExpertise(3)"
-                                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">
-                                Répondre
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
 
@@ -504,42 +500,7 @@
                     <textarea rows="6" placeholder="Votre diagnostic, analyse et conclusions..."
                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               required></textarea>
-                    <p class="text-xs text-gray-500 mt-1">Fournissez votre diagnostic et votre analyse détaillée</p>
-                </div>
-
-                <!-- Recommendations -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Recommandations *</label>
-                    <textarea rows="5" placeholder="Traitement recommandé, examens complémentaires, suivi..."
-                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                              required></textarea>
-                    <p class="text-xs text-gray-500 mt-1">Stratégie thérapeutique et conduite à tenir</p>
-                </div>
-
-                <!-- Additional Notes -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Notes complémentaires</label>
-                    <textarea rows="3" placeholder="Précisions, mises en garde, informations supplémentaires..."
-                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
-                </div>
-
-                <!-- Follow-up Options -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Suivi recommandé</label>
-                    <div class="space-y-2">
-                        <label class="flex items-center gap-2">
-                            <input type="checkbox" class="rounded">
-                            <span class="text-sm text-gray-700">Consultation de suivi dans 2 semaines</span>
-                        </label>
-                        <label class="flex items-center gap-2">
-                            <input type="checkbox" class="rounded">
-                            <span class="text-sm text-gray-700">Examens complémentaires nécessaires</span>
-                        </label>
-                        <label class="flex items-center gap-2">
-                            <input type="checkbox" class="rounded">
-                            <span class="text-sm text-gray-700">Orientation vers un autre spécialiste</span>
-                        </label>
-                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Fournissez votre avis et votre analyse détaillée sur cette consultation</p>
                 </div>
 
                 <!-- Cost Confirmation -->
